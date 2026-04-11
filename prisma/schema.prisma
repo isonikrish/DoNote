@@ -21,7 +21,7 @@ model User {
 model Note {
   id        Int      @id @default(autoincrement())
   title     String   @default("Untitled Note")
-  content   String   @db.Text
+  content   String   @default("") @db.Text
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
   tasks     Task[]
