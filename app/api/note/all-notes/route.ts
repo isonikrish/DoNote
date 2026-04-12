@@ -2,28 +2,24 @@ import { getToken } from "@/lib/generateToken";
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function GET() {
   try {
     const id = await getToken();
     if (!id) {
       return NextResponse.json({ msg: "Unautorized" }, { status: 401 });
     }
+    const notes = await prisma.note.findMany({
+        where: {
+            userId: id
+        },
+        select: {
+            id: true,
+            title: true,
+            createdAt: true
+        }
+    })
 
-    const note = await prisma.note.create({
-      data: {
-        userId: id,
-      },
-    });
-
-    return NextResponse.json(
-      {
-        id: note.id,
-        title: note.title,
-        content: note.content,
-        createdAt: note.createdAt
-      },
-      { status: 200 },
-    );
+    return NextResponse.json(notes, {status: 200})
   } catch {
     return NextResponse.json({ msg: "Internal Server Error" }, { status: 500 });
   }
