@@ -7,23 +7,32 @@ import { useEffect, useState } from "react";
 type Filter = "ALL" | "PENDING" | "DONE";
 
 export function ActionPanel() {
-  const { setNoteId } = useAppStore();
+  const { user, setNoteId } = useAppStore();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState<Filter>("ALL");
 
   /* ---------------- Fetch ---------------- */
   const fetchTasks = async () => {
-    try {
-      const res = await axios.get("/api/task/fetch-tasks");
-      if (res.status === 200) {
-        setTasks(res.data);
-      }
-    } catch {}
-  };
+  if (!user) return;
 
-  useEffect(() => {
-    fetchTasks();
-  }, []);
+  try {
+    const res = await axios.get("/api/task/fetch-tasks");
+    if (res.status === 200) {
+      setTasks(res.data);
+    }
+  } catch {
+    setTasks([]);
+  }
+};
+
+ useEffect(() => {
+  if (!user) {
+    setTasks([]);
+    return;
+  }
+
+  fetchTasks();
+}, [user]);
 
   /* ---------------- Toggle ---------------- */
   const toggleStatus = async (taskId: number) => {

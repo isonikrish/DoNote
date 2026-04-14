@@ -11,12 +11,14 @@ type Note = {
 };
 
 export function NotesSidebar() {
-  const { selectedNoteId, setNoteId } = useAppStore();
+  const { user, selectedNoteId, setNoteId } = useAppStore();
 
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchMyNotes = async () => {
+    if (!user) return;
+
     try {
       setLoading(true);
 
@@ -40,10 +42,17 @@ export function NotesSidebar() {
   };
 
   useEffect(() => {
+    if (!user) {
+      setNotes([]);
+      setLoading(false);
+      return;
+    }
+
     fetchMyNotes();
-  }, []);
+  }, [user]);
 
   const newNote = async () => {
+    if (!user) return;
     try {
       const res = await axios.post("/api/note/new");
 
