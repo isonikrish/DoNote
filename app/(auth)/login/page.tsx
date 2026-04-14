@@ -80,7 +80,7 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-          <p className="mt-6 text-sm text-gray-600">
+          {/* <p className="mt-6 text-sm text-gray-600">
             Don&apos;t have an account?{" "}
             <span
               className="cursor-pointer text-black font-medium underline"
@@ -88,7 +88,7 @@ export default function LoginPage() {
             >
               Signup
             </span>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>

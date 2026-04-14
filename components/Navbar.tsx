@@ -41,17 +41,17 @@ export default function Navbar() {
                         <>
                             <button
                                 onClick={() => router.push("/login")}
-                                className="px-4 py-2 text-sm text-gray-600 hover:text-black transition cursor-pointer"
+                               className="rounded-xl bg-black px-5 py-2 text-sm text-white shadow-sm hover:bg-gray-900 transition-all duration-200 hover:shadow-md cursor-pointer"
                             >
                                 Login
                             </button>
 
-                            <button
+                            {/* <button
                                 onClick={() => router.push("/signup")}
                                 className="rounded-xl bg-black px-5 py-2 text-sm text-white shadow-sm hover:bg-gray-900 transition-all duration-200 hover:shadow-md cursor-pointer"
                             >
                                 Get Started
-                            </button>
+                            </button> */}
                         </>
                     ) : (
                         <button

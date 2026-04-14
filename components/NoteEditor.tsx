@@ -16,7 +16,7 @@ export function NoteEditor({ noteId }: { noteId: number | null }) {
   const [selectedText, setSelectedText] = useState("");
   const [actionPos, setActionPos] = useState<{ x: number; y: number } | null>(null);
 
-  const editorRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   /* ---------------- Fetch Note ---------------- */
   useEffect(() => {
@@ -42,63 +42,37 @@ export function NoteEditor({ noteId }: { noteId: number | null }) {
     };
   }, [noteId]);
 
-  /* ---------------- Sync ContentEditable ---------------- */
-  useEffect(() => {
-    if (editorRef.current && data) {
-      editorRef.current.innerText = data.content || "";
-    }
-  }, [data?.id]);
-
   /* ---------------- Selection Handler ---------------- */
-  useEffect(() => {
-    const handleSelection = () => {
-      const selection = window.getSelection();
-      const text = selection?.toString().trim() || "";
+  const handleSelection = () => {
+    const el = textareaRef.current;
+    if (!el) return;
 
-      setSelectedText(text);
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
 
-      if (text && selection && selection.rangeCount > 0) {
-        const rect = selection.getRangeAt(0).getBoundingClientRect();
+    const text = el.value.substring(start, end).trim();
+    setSelectedText(text);
 
-        if (rect.width || rect.height) {
-          setActionPos({
-            x: rect.left + rect.width / 2,
-            y: rect.top - 45,
-          });
-          return;
-        }
-      }
+    if (text.length > 0) {
+      const rect = el.getBoundingClientRect();
 
+      // approximate position (textarea doesn't give exact range position)
+      setActionPos({
+        x: rect.left + rect.width / 2,
+        y: rect.top - 40,
+      });
+    } else {
       setActionPos(null);
-    };
-
-    const hideOnScroll = () => setActionPos(null);
-
-    document.addEventListener("mouseup", handleSelection);
-    document.addEventListener("touchend", handleSelection);
-    window.addEventListener("scroll", hideOnScroll);
-
-    return () => {
-      document.removeEventListener("mouseup", handleSelection);
-      document.removeEventListener("touchend", handleSelection);
-      window.removeEventListener("scroll", hideOnScroll);
-    };
-  }, []);
+    }
+  };
 
   /* ---------------- Handlers ---------------- */
   const handleTitleChange = (value: string) => {
     setData((prev) => (prev ? { ...prev, title: value } : prev));
   };
 
-  const handleContentInput = () => {
-    if (!editorRef.current) return;
-
-    const text = editorRef.current.innerText;
-
-    setData((prev) => {
-      if (!prev || prev.content === text) return prev;
-      return { ...prev, content: text };
-    });
+  const handleContentChange = (value: string) => {
+    setData((prev) => (prev ? { ...prev, content: value } : prev));
   };
 
   const saveNote = async () => {
@@ -110,7 +84,7 @@ export function NoteEditor({ noteId }: { noteId: number | null }) {
       await axios.put("/api/note/save", {
         noteId: data.id,
         title: data.title,
-        content: editorRef.current?.innerText || "",
+        content: data.content,
       });
     } catch (err) {
       console.error("Save failed:", err);
@@ -200,12 +174,14 @@ export function NoteEditor({ noteId }: { noteId: number | null }) {
 
       {/* Content */}
       <div className="flex-1 px-6 py-4">
-        <div
-          ref={editorRef}
-          contentEditable
-          suppressContentEditableWarning
-          onInput={handleContentInput}
-          className="w-full h-full outline-none text-sm text-gray-700 leading-relaxed whitespace-pre-wrap"
+        <textarea
+          ref={textareaRef}
+          value={data.content}
+          onChange={(e) => handleContentChange(e.target.value)}
+          onMouseUp={handleSelection}
+          onKeyUp={handleSelection}
+          placeholder="Start writing your note..."
+          className="w-full h-full resize-none outline-none text-sm text-gray-700 leading-relaxed"
         />
       </div>
     </div>
