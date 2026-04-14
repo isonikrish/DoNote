@@ -22,12 +22,16 @@ export function NotesSidebar() {
 
       const res = await axios.get("/api/note/all-notes");
 
-      setNotes(res.data);
+      const sorted = res.data.sort(
+        (a: Note, b: Note) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
 
-      // auto select first note
-      if (res.data.length > 0) {
-        setNoteId(res.data[0].id);
+      setNotes(sorted);
+      if (sorted.length > 0) {
+        setNoteId(sorted[0].id);
       }
+
     } catch {
       setNotes([]);
     } finally {
@@ -46,10 +50,8 @@ export function NotesSidebar() {
       if (res.status === 200) {
         const newNote = res.data;
 
-        // add to top
         setNotes((prev) => [newNote, ...prev]);
 
-        // select it
         setNoteId(newNote.id);
       }
     } catch { }
@@ -58,7 +60,6 @@ export function NotesSidebar() {
   return (
     <div className="flex h-full flex-col bg-white">
 
-      {/* Header */}
       <div className="border-b px-5 py-4">
         <button
           onClick={newNote}
@@ -68,31 +69,27 @@ export function NotesSidebar() {
         </button>
       </div>
 
-      {/* Notes */}
       <div className="flex-1 overflow-y-auto text-black">
 
-        {/* Loading */}
         {loading ? (
           <div className="flex h-full items-center justify-center text-sm text-gray-500">
             Loading notes...
           </div>
         ) : notes.length === 0 ? (
-          /* Empty State */
           <div className="flex h-full items-center justify-center px-4 text-center text-sm text-gray-500">
             No notes yet.
             <br />
             Create your first note.
           </div>
         ) : (
-          /* Notes List */
           <div className="flex flex-col">
             {notes.map((note) => (
               <div
                 key={note.id}
                 onClick={() => setNoteId(note.id)}
                 className={`px-5 py-3 border cursor-pointer transition ${selectedNoteId === note.id
-                    ? "bg-gray-100 border-gray-200"
-                    : "hover:bg-gray-50 border-gray-200"
+                  ? "bg-gray-100 border-gray-200"
+                  : "hover:bg-gray-50 border-gray-200"
                   }`}
               >
                 <p className="text-sm font-medium truncate">
@@ -108,10 +105,6 @@ export function NotesSidebar() {
         )}
       </div>
 
-      {/* Footer */}
-      <div className="border-t px-5 py-3 text-xs text-gray-500">
-        {loading ? "..." : `${notes.length} ${notes.length === 1 ? "note" : "notes"}`}
-      </div>
     </div>
   );
 }

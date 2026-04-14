@@ -7,6 +7,13 @@ type Note = {
     title: string;
     createdAt: Date
 }
+type Task = {
+    id: number;
+    title: string;
+    createdAt: Date;
+    status: "DONE" | "PENDING";
+    note: Note
+}
 type useAppStoreType = {
     user: User | null,
     setUser: (data: User | null) => void;
