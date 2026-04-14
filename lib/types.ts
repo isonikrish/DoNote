@@ -18,5 +18,5 @@ type useAppStoreType = {
     user: User | null,
     setUser: (data: User | null) => void;
     selectedNoteId: number | null;
-    setNoteId: (id: number) =>void;
+    setNoteId: (id: number | null) =>void;
 }

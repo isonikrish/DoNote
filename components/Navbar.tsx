@@ -7,7 +7,7 @@ import axios from "axios";
 
 export default function Navbar() {
     const router = useRouter();
-    const { user, setUser } = useAppStore();
+    const { user, setUser, setNoteId } = useAppStore();
 
     const [open, setOpen] = useState(false);
 
@@ -15,8 +15,9 @@ export default function Navbar() {
         try {
             await axios.post("/api/auth/logout");
         } catch {
-         }
+        }
         setUser(null);
+        setNoteId(null);
         router.push("/login");
     };
 
@@ -41,7 +42,7 @@ export default function Navbar() {
                         <>
                             <button
                                 onClick={() => router.push("/login")}
-                               className="rounded-xl bg-black px-5 py-2 text-sm text-white shadow-sm hover:bg-gray-900 transition-all duration-200 hover:shadow-md cursor-pointer"
+                                className="rounded-xl bg-black px-5 py-2 text-sm text-white shadow-sm hover:bg-gray-900 transition-all duration-200 hover:shadow-md cursor-pointer"
                             >
                                 Login
                             </button>
