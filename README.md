@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DoNote
 
-## Getting Started
+**DoNote** is a minimal productivity app that combines **note-taking with actionable tasks**. It lets users capture ideas as notes and seamlessly turn them into tasks, keeping everything organized in one place.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+DoNote is built for simplicity and speed. Instead of juggling between separate apps for notes and to-dos, it provides a unified interface where:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+* Notes and tasks are connected
+* Tasks can be linked directly to specific notes
+* Users can track progress with simple status toggles (Pending / Done)
+* Everything stays clean, fast, and distraction-free
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+The goal is to reduce friction between **thinking (notes)** and **doing (actions)**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Core Idea
 
-## Learn More
+> Write → Organize → Act
 
-To learn more about Next.js, take a look at the following resources:
+Capture thoughts instantly, attach actions to them, and manage everything without context switching.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* **Frontend:** Next.js
+* **Backend:** API routes (Next.js)
+* **State Management:** Zustand
+* **Database:** Prisma + PostgreSQL
 
-## Deploy on Vercel
+## Status
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Early-stage project focused on building a fast, intuitive workflow for personal productivity.
